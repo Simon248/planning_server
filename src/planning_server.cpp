@@ -236,6 +236,10 @@ void TesseractPlanningServer::onMotionPlanningCallback(
     goal_handle->succeed(result);
     return;
   }
+  bool test= tesseract_common::Serialization::toArchiveFileXML(problem->input,
+                               "test_tesseract_serialisation_server_side.xml",
+                               "any_composite_instruction");
+
 
   tesseract_environment::Environment::Ptr env = environment_cache_->getCachedEnvironment();
 
