@@ -124,9 +124,9 @@ def generate_launch_description():
             description='Task composer config file'
         ),
         Node(
-            package='tesseract_planning_server',
-            executable='tesseract_planning_server_node',
-            name='tesseract_planning_server',
+            package='planning_server',
+            executable='planning_server_node',
+            name='planning_server',
             output='screen',
             parameters=[{
                 'robot_description': robot_description_file,
