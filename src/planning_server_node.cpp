@@ -65,12 +65,14 @@ int main(int argc, char** argv)
   }
   std::string monitored_namespace = node->declare_parameter("monitored_namespace", "");
   std::string robot_description = node->declare_parameter(ROBOT_DESCRIPTION_PARAM, "");
+  // std::cout<<"URDF : "<<robot_description<<std::endl;
   if (robot_description.empty())
   {
     RCLCPP_ERROR(node->get_logger(), "Missing required parameter robot_description!");
     return 1;
   }
   std::string robot_description_semantic = node->declare_parameter(ROBOT_DESCRIPTION_SEMANTIC_PARAM, "");
+  // std::cout<<"SRDF : "<<robot_description_semantic<<std::endl;
   if (robot_description_semantic.empty())
   {
     RCLCPP_ERROR(node->get_logger(), "Missing required parameter robot_description_semantic!");
@@ -80,6 +82,7 @@ int main(int argc, char** argv)
   cache_size = node->declare_parameter("cache_size", cache_size);
   cache_refresh_rate = node->declare_parameter("cache_refresh_rate", cache_refresh_rate);
   std::string task_composer_config = node->declare_parameter("task_composer_config", "");
+
 
   std::shared_ptr<tesseract_planning_server::TesseractPlanningServer> planning_server =
       std::make_shared<TesseractPlanningServer>(node, ROBOT_DESCRIPTION_PARAM, monitor_namespace);

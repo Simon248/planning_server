@@ -224,7 +224,11 @@ void TesseractPlanningServer::onMotionPlanningCallback(
   auto problem = std::make_unique<tesseract_planning::PlanningTaskComposerProblem>(goal->request.name);
   try
   {
+    RCLCPP_ERROR_STREAM(node_->get_logger(), "rrrrrrrrrrtttttttttttttttttttrrrrrrr");
+    std::cout << "Type de input: " << typeid(goal->request.input).name() << std::endl;
     problem->input = Serialization::fromArchiveStringXML<tesseract_common::AnyPoly>(goal->request.input);
+    RCLCPP_ERROR_STREAM(node_->get_logger(), "22222222222222222222222222222222222222222");
+
   }
   catch (const std::exception& e)
   {
@@ -236,11 +240,12 @@ void TesseractPlanningServer::onMotionPlanningCallback(
     goal_handle->succeed(result);
     return;
   }
-  bool test= tesseract_common::Serialization::toArchiveFileXML(problem->input,
-                               "test_tesseract_serialisation_server_side.xml",
-                               "any_composite_instruction");
-
-
+  // bool test= tesseract_common::Serialization::toArchiveFileXML(problem->input,
+  //                              "test_tesseract_serialisation_server_side.xml",
+  //                              "any_composite_instruction");
+  RCLCPP_ERROR_STREAM(node_->get_logger(), "rrrrrrrrrrrrrrrrr");
+   std::cout <<"eeeeeeeeeeeeeeeeeeeee"<<std::endl;
+   
   tesseract_environment::Environment::Ptr env = environment_cache_->getCachedEnvironment();
 
   tesseract_scene_graph::SceneState env_state;
@@ -262,12 +267,14 @@ void TesseractPlanningServer::onMotionPlanningCallback(
 
   // Solve
   tesseract_common::Timer timer;
+  std::cout <<"starting_timer"<<std::endl;
   timer.start();
+  
   tesseract_planning::TaskComposerFuture::UPtr plan_future =
       planning_server_->run(std::move(problem), std::make_unique<TaskComposerDataStorage>(), executor_name);
   plan_future->wait();  // Wait for results
   timer.stop();
-
+  std::cout <<"end_timer"<<std::endl;
   // Generate DOT Graph if requested
   if (goal->request.dotgraph)
   {
@@ -286,13 +293,18 @@ void TesseractPlanningServer::onMotionPlanningCallback(
       RCLCPP_ERROR_STREAM(node_->get_logger(), oss.str());
     }
   }
-
+    std::cout <<"1111111111111111111111111111111111"<<std::endl;
   try
   {
     const tesseract_planning::TaskComposerNode& task = planning_server_->getTask(plan_future->context->problem->name);
+    std::cout <<"0000000000000000000000000000000000"<<std::endl;
     tesseract_common::AnyPoly results = plan_future->context->data_storage->getData(task.getOutputKeys().front());
+    std::cout <<"121212121212121212121212121"<<std::endl;
     result->response.results = Serialization::toArchiveStringXML<tesseract_planning::InstructionPoly>(
         results.as<tesseract_planning::CompositeInstruction>());
+    std::cout <<"222222222222222222222222222222222222222"<<std::endl;
+
+
   }
   catch (const std::exception& e)
   {

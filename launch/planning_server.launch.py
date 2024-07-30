@@ -7,8 +7,10 @@ from ament_index_python.packages import get_package_share_directory
 
 from launch_ros.substitutions import FindPackageShare
 from launch.substitutions import Command, PathJoinSubstitution,TextSubstitution
+import os
 def generate_launch_description():
 
+    os.environ['TRAJOPT_LOG_THRESH'] = 'DEBUG'
     ### SRDF URDF ###
 
     #### Define the robot description file ####
@@ -69,7 +71,7 @@ def generate_launch_description():
         
         DeclareLaunchArgument(
             'monitor_namespace',
-            default_value='jesaispas',
+            default_value='s',
             description='Namespace to monitor'
         ),
         DeclareLaunchArgument(
@@ -120,7 +122,8 @@ def generate_launch_description():
         ),
         DeclareLaunchArgument(
             'task_composer_config',
-            default_value=[get_package_share_directory('tesseract_task_composer'), '/config/task_composer_plugins.yaml'],
+            default_value=os.path.join(get_package_share_directory('tesseract_task_composer'), 'config/task_composer_plugins.yaml'),
+            # default_value=[get_package_share_directory('tesseract_task_composer'), '/config/task_composer_plugins.yaml'],
             description='Task composer config file'
         ),
         Node(
